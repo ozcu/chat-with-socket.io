@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+   
+<h3>Socket.io Chat App</h3>
+    <div id="app">   
+        <ul>
+            <li class="messages" v-for="message in listOfMessages" >
+                {{message}}
+            </li> 
+        </ul>
+        <input type="text" v-model="input">
+        <button @click="sendPrivateMessage">send to me</button>
+        <button @click="sendGlobalMessage">send to everyone</button>
+        <button @click="sendBroadcastMessage">send to everyone but me</button>
+
+
+
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io()
+        socket.on("chat message",(message)=>{
+           VueApp.listOfMessages.push(message)
+           console.log(message)
+           
+        })
+
+    </script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+    <script>
+        const VueApp = new Vue({
+            el:"#app",
+            data:{
+                listOfMessages:[],
+                input:''
+               
+            },
+            methods:{
+
+                sendPrivateMessage(){
+                    socket.emit("private message",this.input)
+                    this.input = ''
+                },
+                sendGlobalMessage(){
+                    socket.emit("global message",this.input)
+                    this.input = ''
+                },
+                sendBroadcastMessage(){
+                    socket.emit("broadcast message",this.input)
+                    this.input = ''
+                }
+            }
+
+         
+
+        })
+    </script>
+</body>
+</html>
+
+
+<style>
+
+
+.messages{
+
+    width:300px;
+    height:auto;
+    font-size:20px;
+    background-color: aqua;
+    padding:10px;
+}
+
+</style>
