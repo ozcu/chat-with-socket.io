@@ -8,9 +8,11 @@ const server = http.createServer(app)
 const io = socketIO(server)
 
 
-io.on('connection',(socket)=>{
+io.on('connection',async (socket)=>{
 
-    console.log('user connected')
+    console.log('user connected with id:' + socket.id )
+    socket.join('room 1')
+   
    
 
     socket.on('private message',(message) =>{
